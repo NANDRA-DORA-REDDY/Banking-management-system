@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banking Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Banking Management System</h1>
+
+    <!-- Login View -->
+    <div id="login-view" class="card">
+      <h2>Login</h2>
+      <p><small>Default Admin: <strong>admin</strong> / <strong>admin123</strong></small></p>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="login()">Log In</button>
+      <p id="login-error" class="error"></p>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="card hidden">
+      <div class="header-bar">
+        <h2>Welcome, <span id="user-display"></span> (<span id="role-display"></span>)</h2>
+        <button onclick="logout()" class="btn-danger">Logout</button>
+      </div>
+
+      <!-- Admin Panel -->
+      <div id="admin-panel" class="hidden">
+        <h3>Admin Actions</h3>
+        <div class="button-grid">
+          <button onclick="showSection('create-customer')">Add Customer</button>
+          <button onclick="showSection('create-account')">Create Account</button>
+          <button onclick="showSection('deposit-withdraw')">Deposit / Withdraw</button>
+          <button onclick="renderReports()">View Summary Report</button>
+        </div>
+
+        <div id="create-customer" class="sub-card hidden">
+          <h4>Add Customer</h4>
+          <input type="number" id="cust-id" placeholder="Customer ID">
+          <input type="text" id="cust-name" placeholder="Name">
+          <input type="text" id="cust-phone" placeholder="Phone">
+          <input type="email" id="cust-email" placeholder="Email">
+          <button onclick="addCustomer()">Submit Customer</button>
+        </div>
+
+        <div id="create-account" class="sub-card hidden">
+          <h4>Create Account</h4>
+          <input type="number" id="acc-num" placeholder="Account Number">
+          <input type="number" id="acc-cust-id" placeholder="Customer ID">
+          <input type="text" id="acc-type" placeholder="Account Type (Savings/Current)">
+          <input type="number" id="acc-deposit" placeholder="Initial Deposit">
+          <button onclick="createAccount()">Create Account</button>
+        </div>
+      </div>
+
+      <!-- Common Transaction Panel -->
+      <div id="deposit-withdraw" class="sub-card hidden">
+        <h4>Deposit / Withdraw</h4>
+        <input type="number" id="trans-acc-num" placeholder="Account Number">
+        <input type="number" id="trans-amount" placeholder="Amount">
+        <button onclick="handleTransaction('Deposit')">Deposit</button>
+        <button onclick="handleTransaction('Withdrawal')">Withdraw</button>
+      </div>
+
+      <!-- Data Display -->
+      <div id="output-area" class="output-box"></div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
