@@ -9,7 +9,7 @@ The repository also includes the original compiled C++ source code (`BankingMana
 ## 🚀 Live Demo
 
 Check out the live application on GitHub Pages:
-`(https://nandra-dora-reddy.github.io/Banking-management-system/)` 
+`https://nandra-dora-reddy.github.io/Banking-management-system/` 
 
 ---
 
