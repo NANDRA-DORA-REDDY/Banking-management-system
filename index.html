@@ -7,68 +7,166 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Banking Management System</h1>
+  <div class="app-container">
+    <header>
+      <h1>Banking Management System</h1>
+    </header>
 
-    <!-- Login View -->
-    <div id="login-view" class="card">
-      <h2>Login</h2>
-      <p><small>Default Admin: <strong>admin</strong> / <strong>admin123</strong></small></p>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Log In</button>
-      <p id="login-error" class="error"></p>
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="card">
+      <h2>System Login</h2>
+      <p class="subtitle">Default Admin Credentials: <strong>admin</strong> / <strong>admin123</strong></p>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-username" placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Enter password">
+      </div>
+      <button onclick="handleLogin()" class="btn btn-primary">Login</button>
+      <p id="login-error" class="error-msg"></p>
     </div>
 
-    <!-- Dashboard View -->
-    <div id="dashboard-view" class="card hidden">
-      <div class="header-bar">
-        <h2>Welcome, <span id="user-display"></span> (<span id="role-display"></span>)</h2>
-        <button onclick="logout()" class="btn-danger">Logout</button>
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard-screen" class="card hidden">
+      <div class="user-bar">
+        <div>Logged in as: <strong id="display-user"></strong> (<span id="display-role"></span>)</div>
+        <button onclick="handleLogout()" class="btn btn-danger">Logout</button>
       </div>
 
-      <!-- Admin Panel -->
-      <div id="admin-panel" class="hidden">
-        <h3>Admin Actions</h3>
-        <div class="button-grid">
-          <button onclick="showSection('create-customer')">Add Customer</button>
-          <button onclick="showSection('create-account')">Create Account</button>
-          <button onclick="showSection('deposit-withdraw')">Deposit / Withdraw</button>
-          <button onclick="renderReports()">View Summary Report</button>
+      <!-- NAV TABS -->
+      <div class="nav-tabs">
+        <button id="tab-cust" onclick="switchTab('customers')" class="tab-btn">Customers</button>
+        <button id="tab-acc" onclick="switchTab('accounts')" class="tab-btn">Accounts</button>
+        <button id="tab-trans" onclick="switchTab('transactions')" class="tab-btn">Transactions</button>
+        <button id="tab-sec" onclick="switchTab('security')" class="tab-btn">Security</button>
+        <button id="tab-rep" onclick="switchTab('reports')" class="tab-btn">Reports</button>
+      </div>
+
+      <!-- CUSTOMER MANAGEMENT -->
+      <div id="section-customers" class="tab-content hidden">
+        <h3>Customer Management</h3>
+        <div class="action-bar admin-only">
+          <button onclick="showSubForm('add-cust-form')" class="btn">Add Customer</button>
+          <button onclick="showSubForm('update-cust-form')" class="btn">Update Customer</button>
+          <button onclick="showSubForm('del-cust-form')" class="btn btn-danger">Delete Customer</button>
         </div>
 
-        <div id="create-customer" class="sub-card hidden">
+        <div id="add-cust-form" class="sub-form hidden admin-only">
           <h4>Add Customer</h4>
           <input type="number" id="cust-id" placeholder="Customer ID">
-          <input type="text" id="cust-name" placeholder="Name">
-          <input type="text" id="cust-phone" placeholder="Phone">
-          <input type="email" id="cust-email" placeholder="Email">
-          <button onclick="addCustomer()">Submit Customer</button>
+          <input type="text" id="cust-name" placeholder="Full Name">
+          <input type="text" id="cust-phone" placeholder="Phone Number">
+          <input type="email" id="cust-email" placeholder="Email Address">
+          <button onclick="addCustomer()" class="btn btn-success">Save Customer</button>
         </div>
 
-        <div id="create-account" class="sub-card hidden">
+        <div id="update-cust-form" class="sub-form hidden admin-only">
+          <h4>Update Customer</h4>
+          <input type="number" id="up-cust-id" placeholder="Customer ID">
+          <input type="text" id="up-cust-name" placeholder="New Name">
+          <input type="text" id="up-cust-phone" placeholder="New Phone">
+          <input type="email" id="up-cust-email" placeholder="New Email">
+          <button onclick="updateCustomer()" class="btn btn-success">Update</button>
+        </div>
+
+        <div id="del-cust-form" class="sub-form hidden admin-only">
+          <h4>Delete Customer</h4>
+          <input type="number" id="del-cust-id" placeholder="Customer ID to Delete">
+          <button onclick="deleteCustomer()" class="btn btn-danger">Delete Customer</button>
+        </div>
+
+        <div class="display-area" id="customers-list"></div>
+      </div>
+
+      <!-- ACCOUNT MANAGEMENT -->
+      <div id="section-accounts" class="tab-content hidden">
+        <h3>Account Management</h3>
+        <div class="action-bar admin-only">
+          <button onclick="showSubForm('create-acc-form')" class="btn">Create Account</button>
+          <button onclick="showSubForm('search-acc-form')" class="btn">Search Account</button>
+          <button onclick="showSubForm('update-acc-form')" class="btn">Update Account Type</button>
+        </div>
+
+        <div id="create-acc-form" class="sub-form hidden admin-only">
           <h4>Create Account</h4>
           <input type="number" id="acc-num" placeholder="Account Number">
           <input type="number" id="acc-cust-id" placeholder="Customer ID">
-          <input type="text" id="acc-type" placeholder="Account Type (Savings/Current)">
+          <input type="text" id="acc-type" placeholder="Type (Savings/Current)">
           <input type="number" id="acc-deposit" placeholder="Initial Deposit">
-          <button onclick="createAccount()">Create Account</button>
+          <button onclick="createAccount()" class="btn btn-success">Create Account</button>
+        </div>
+
+        <div id="search-acc-form" class="sub-form hidden">
+          <h4>Search Account</h4>
+          <input type="number" id="search-acc-num" placeholder="Enter Account Number">
+          <button onclick="searchAccount()" class="btn">Search</button>
+        </div>
+
+        <div id="update-acc-form" class="sub-form hidden admin-only">
+          <h4>Update Account Type</h4>
+          <input type="number" id="up-acc-num" placeholder="Account Number">
+          <input type="text" id="up-acc-type" placeholder="New Account Type">
+          <button onclick="updateAccount()" class="btn btn-success">Update Account</button>
+        </div>
+
+        <div class="display-area" id="accounts-list"></div>
+      </div>
+
+      <!-- TRANSACTIONS -->
+      <div id="section-transactions" class="tab-content hidden">
+        <h3>Transactions</h3>
+        <div class="sub-form">
+          <input type="number" id="trans-acc-num" placeholder="Account Number">
+          <input type="number" id="trans-amount" placeholder="Amount">
+          <div class="button-group">
+            <button onclick="processTransaction('Deposit')" class="btn btn-success">Deposit</button>
+            <button onclick="processTransaction('Withdrawal')" class="btn btn-danger">Withdraw</button>
+            <button onclick="checkBalance()" class="btn">Check Balance</button>
+            <button onclick="viewHistory()" class="btn">Transaction History</button>
+          </div>
+        </div>
+        <div class="display-area" id="transactions-output"></div>
+      </div>
+
+      <!-- SECURITY -->
+      <div id="section-security" class="tab-content hidden">
+        <h3>Security & Login</h3>
+        <div class="sub-form">
+          <h4>Change Password</h4>
+          <input type="password" id="old-pass" placeholder="Current Password">
+          <input type="password" id="new-pass" placeholder="New Password">
+          <input type="password" id="confirm-pass" placeholder="Confirm New Password">
+          <button onclick="changePassword()" class="btn btn-success">Change Password</button>
+        </div>
+
+        <div class="sub-form admin-only" style="margin-top: 20px;">
+          <h4>Register User (Admin Only)</h4>
+          <input type="text" id="reg-username" placeholder="Username">
+          <input type="password" id="reg-password" placeholder="Password">
+          <select id="reg-role">
+            <option value="Admin">Admin</option>
+            <option value="Customer">Customer</option>
+          </select>
+          <input type="number" id="reg-cust-id" placeholder="Linked Customer ID (If Customer)">
+          <button onclick="registerUser()" class="btn btn-success">Register User</button>
         </div>
       </div>
 
-      <!-- Common Transaction Panel -->
-      <div id="deposit-withdraw" class="sub-card hidden">
-        <h4>Deposit / Withdraw</h4>
-        <input type="number" id="trans-acc-num" placeholder="Account Number">
-        <input type="number" id="trans-amount" placeholder="Amount">
-        <button onclick="handleTransaction('Deposit')">Deposit</button>
-        <button onclick="handleTransaction('Withdrawal')">Withdraw</button>
+      <!-- REPORTS -->
+      <div id="section-reports" class="tab-content hidden">
+        <h3>Reports & Summary</h3>
+        <div class="action-bar admin-only">
+          <button onclick="generateReport('summary')" class="btn">Full System Summary</button>
+          <button onclick="generateReport('transactions')" class="btn">Transaction Overview</button>
+        </div>
+        <div class="display-area" id="reports-output"></div>
       </div>
 
-      <!-- Data Display -->
-      <div id="output-area" class="output-box"></div>
     </div>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
